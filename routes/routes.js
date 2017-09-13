@@ -9,7 +9,7 @@ const
     userUtils = require('../models/utils/userUtils'),
     emailUtils = require('../models/utils/emailUtils'),
     verificationUtils = require('../models/utils/verificationCodeUtils'),
-    errormessages = require('../utils/errormessages'),
+    errormessages = require('../utils/errorMessages'),
     log = require('../helpers/logger').getLogger('ROUTES');
 
 //=============================================================================

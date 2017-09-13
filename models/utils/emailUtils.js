@@ -5,7 +5,7 @@
  */
 //=============================================================================
 const emailSettings = require('../emailSettings'),
-    error_codes = require('../../utils/errormessages').error_codes,
+    error_codes = require('../../utils/errorMessages').error_codes,
     log = require('../../helpers/logger').getLogger('EmailUtils');
 
 //=============================================================================

@@ -7,7 +7,7 @@
 const verificationCode = require('../verificationCode'),
     log = require('../../helpers/logger').getLogger('VerificationCodeUtils'),
     userUtils = require('./userUtils'),
-    error_codes = require('../../utils/errormessages').error_codes;
+    error_codes = require('../../utils/errorMessages').error_codes;
 
 
 exports.types = {

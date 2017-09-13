@@ -5,7 +5,7 @@ var hat = require('hat'),
     jwt = require('jwt-simple'),
     _ = require("lodash"),
                 Promise = require('bluebird'),
-     error_codes = require('./errormessages').error_codes,
+     error_codes = require('./errorMessages').error_codes,
 
     secret = process.env.JWTSECRET;
 
