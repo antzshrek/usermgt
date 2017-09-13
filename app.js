@@ -118,6 +118,11 @@ app.use((req, res, next) => {
 app.get('/test', (req, res) => {
     return res.status(200).json('OK');
 });
+
+app.get('/', (req, res) => {
+    return res.status(200).json('Welcome to the User Management Microservice');
+});
+
 app.use('/userapi', routes);
 //=============================================================================
 /**
