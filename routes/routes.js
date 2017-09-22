@@ -44,7 +44,7 @@ router.post('/createUser', (req, res) => {
 
 //used on login page
 router.post('/login', (req, res) => {
-    userUtils.login(req.body.email, req.body.password)
+    userUtils.login(req.body)
         .then(result => {
             log.debug('/login ' + JSON.stringify(result));
             return res.status(200).json(result);
@@ -57,6 +57,83 @@ router.post('/login', (req, res) => {
 });
 
 
+router.post('/enableTotpById', (req,res) => {
+    userUtils.enableTotpById(req.body.uid)
+        .then(result =>{
+            log.debug('/enableTotpById ' + JSON.stringify(result));
+            return res.status(200).json(result);
+        }).catch(err=> {
+            let error = errormessages.processError(err);
+            log.error('/enableTotpById ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+        });
+});
+
+
+router.post('/enableTotpByEmail', (req,res) => {
+    userUtils.enableTotpByEmail(req.body.email)
+        .then(result =>{
+            log.debug('/enableTotpByEmail ' + JSON.stringify(result));
+            return res.status(200).json(result);
+        }).catch(err=> {
+            let error = errormessages.processError(err);
+            log.error('/enableTotpByEmail ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+        });
+});
+
+
+router.post('/getTotpByEmail', (req, res) =>{
+    userUtils.getTotpByEmail(req.body.email)
+        .then(result =>{
+            log.debug('/getTotpByEmail ' + JSON.stringify(result));
+            return res.status(200).json(result);
+        }).catch(err=> {
+            let error = errormessages.processError(err);
+            log.error('/getTotpByEmail ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+        });    
+});
+
+
+router.post('/getTotpById', (req, res) =>{
+    userUtils.getTotpById(req.body.uid)
+        .then(result =>{
+            log.debug('/getTotpById ' + JSON.stringify(result));
+            return res.status(200).json(result);
+        }).catch(err=> {
+            let error = errormessages.processError(err);
+            log.error('/getTotpById ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+        });    
+});
+
+router.post('/disableTotpById', (req, res) =>{
+    userUtils.disableTotpById(req.body.uid)
+        .then(result =>{
+            log.debug('/disableTotpById ' + JSON.stringify(result));
+            return res.status(200).json(result);
+        }).catch(err=> {
+            let error = errormessages.processError(err);
+            log.error('/disableTotpById ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+        });    
+});
+
+
+router.post('/disableTotpByEmail', (req, res) =>{
+    userUtils.disableTotpByEmail(req.body.email)
+        .then(result =>{
+            log.debug('/disableTotpByEmail ' + JSON.stringify(result));
+            return res.status(200).json(result);
+        }).catch(err=> {
+            let error = errormessages.processError(err);
+            log.error('/disableTotpByEmail ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+        });    
+});
+
+
 router.post('/forgotPassword', (req, res) => {
     userUtils.forgotPassword(req.body.email)
         .then(user => {
@@ -66,6 +143,7 @@ router.post('/forgotPassword', (req, res) => {
         return res.status(error.code).json(error.msg);
     })
 });
+
 
 
 //=============================================================================
