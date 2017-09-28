@@ -38,6 +38,24 @@ exports.createUser = (properties) => {
 };
 
 
+exports.deleteUser = (property, value) => {
+
+    if (!property || !value) {
+        return Promise.reject(error_codes.MissingFields); //MissingFields
+    }
+
+    if (this.validateProperty(property)) {
+        var query = {};
+        query[property] = value;
+        log.error("DELETE USER " + JSON.stringify(query));
+        return User.findOneAndRemove(query).exec();
+    }
+    else {
+        return Promise.reject(error_codes.ResourceNotValid); //ResourceNotValid
+    }
+
+};
+
 
 exports.validateProperty = property => {
 
@@ -233,17 +251,14 @@ exports.disableTotpByEmail =(userEmail) =>{
 exports.login = (userCredentials) => {
     if(userCredentials.hasOwnProperty('totp'))
     {
-        console.log("totp");
         return this.totpLogin(userCredentials);
     }else{
-        console.log("no totp");
         return this.normalLogin(userCredentials);
     }
 
 };
 
 exports.normalLogin =(creds) =>{
-console.log("see me " + JSON.stringify(creds));
     return this.getUserByProperty('email', creds.email)
         .then(user => {
             if (!user) {
@@ -390,4 +405,45 @@ exports.updateUser = (email, property, value) => {
 
 };
 
+
+exports.updateUserByProperties = (email, properties, values) => {
+
+    if (!email || !properties || !values) {
+        return Promise.reject(error_codes.MissingFields);
+    }
+    else if (!Array.isArray(properties) || !Array.isArray(values)) {
+        return Promise.reject(error_codes.ResourceNotValid);
+    }
+    else if (properties.length != values.length) {
+        return Promise.reject(error_codes.ResourceNotValid);
+    }
+
+    return this.getUserByProperty("email", email)
+        .then(user => {
+            if (user) {
+                for (var i in properties) {
+                    if (properties.hasOwnProperty(i)) {
+                        let property = properties[i];
+                        if (this.validateProperty(property)) {
+                            user[property] = values[i];
+                        }
+                        else {
+                            return Promise.reject(error_codes.ResourceNotValid);//ResourceNotValid
+                        }
+                    }
+                }
+                return user.save();
+            }
+            else {
+                log.error('The user ' + email + ' doesn\'t exist');
+                return Promise.reject(error_codes.ResourceNotExist); //UnknownError
+            }
+
+        }).then(user => {
+            return user;
+        }).catch(err => {
+            return Promise.reject(err);
+        });
+
+};
 

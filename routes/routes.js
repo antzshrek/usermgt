@@ -196,6 +196,62 @@ router.put('/updateEmailSettings', (req, res) => {
 
     });
 });
+
+router.put('/updateUser', (req, res) => {
+
+    if (Array.isArray(req.body.property) && Array.isArray(req.body.value)) {
+        userUtils.updateUserByProperties(req.body.email, req.body.property, req.body.value)
+            .then(value => {
+                log.debug('successfully updated to ' + JSON.stringify(value));
+                return res.status(200).json(value);
+            }).catch(err => {
+            log.error('/updateUser err ' + JSON.stringify(err));
+            let error = errormessages.processError(err);
+            return res.status(error.code).json(error.msg);
+
+        });
+    }
+    else {
+        userUtils.updateUser(req.body.email, req.body.property, req.body.value)
+            .then(value => {
+                log.debug('successfully updated to ' + JSON.stringify(value));
+                return res.status(200).json(value);
+            }).catch(err => {
+            let error = errormessages.processError(err);
+            log.error('/updateUser err ' + JSON.stringify(error));
+            return res.status(error.code).json(error.msg);
+
+        });
+    }
+});
+
+
+
+router.delete('/deleteUser', (req, res) => {
+
+    userUtils.deleteUser(req.body.property, req.body.value).then(user=> {
+        if (user)
+        {
+            log.info('Successfully deleted ' + JSON.stringify(user));
+            return res.status(200).json(user.email);
+        }
+        else {
+            log.error('Could not find user to delete');
+
+            let error= errormessages.error_codes.ResourceNotExist;
+            return res.status(error.code).json(error.msg);
+        }
+
+
+    }).catch(err => {
+        let error = errormessages.processError(err);
+        log.error('/deleteUser err ' + JSON.stringify(error));
+
+        return res.status(error.code).json(error.msg);
+
+    });
+
+});
 //=============================================================================
 /**
  * Export Router
